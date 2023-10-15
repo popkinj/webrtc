@@ -3,29 +3,39 @@
 	// import { writable } from 'svelte/store';
 
 	let signalOffer = '';
+	let signalAccept = '';
 	let peerConnection;
+	let dataChannel;
 
 	// Create a new RTCPeerConnection
 	onMount(() => {
 		peerConnection = new RTCPeerConnection();
+		dataChannel = peerConnection.createDataChannel('dataChannel');
 	});
 
 	// Function to start a webrtc peer 2 peer connection
 	const startP2P = async () => {
 		// Create a data channel
-		const dataChannel = peerConnection.createDataChannel('dataChannel');
 
 		// Listen for messages
 		dataChannel.addEventListener('message', (event) => {
 			console.log(`Message from DataChannel '${dataChannel.label}'`);
-			console.log(event.data);
 		});
 
 		// Create an offer
 		const offer = await peerConnection.createOffer();
 		await peerConnection.setLocalDescription(offer);
 		signalOffer = JSON.stringify(offer.toJSON());
-		// console.log(signalOffer);
+	};
+
+	// TODO: Think I need to listen for Ice candidates here
+	const acceptP2P = async () => {
+		const accept = JSON.parse(signalAccept);
+		console.log('accept', accept);
+		await peerConnection.setRemoteDescription(accept);
+		setInterval(() => {
+			console.log('connection state', peerConnection.connectionState);
+		}, 1000);
 	};
 </script>
 
@@ -40,9 +50,10 @@
 	<div>
 		<label>
 			Paste the counter offer here:
-			<textarea rows="10" />
+			<textarea rows="10" bind:value={signalAccept} />
 		</label>
-		<button class="secondary">Accept Peer 2 Peer Connection</button>
+		{#if signalAccept}
+			<button class="secondary" on:click={acceptP2P}>Accept Peer 2 Peer Connection</button>
+		{/if}
 	</div>
 {/if}
-<hr />
