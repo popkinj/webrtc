@@ -3,7 +3,6 @@
 	// import { writable } from 'svelte/store';
 
 	let signalOffer = '';
-	let signalAccept = '';
 	let peerConnection;
 
 	// Create a new RTCPeerConnection
@@ -28,21 +27,6 @@
 		signalOffer = JSON.stringify(offer.toJSON());
 		// console.log(signalOffer);
 	};
-
-	const acceptP2P = async () => {
-		console.log('signalAccept', signalAccept);
-		// TODO: Parse signalAccept and use it to create an accept offer
-
-		// signalAccept = signalAccept;
-		// Create an answer
-		// const answer = await peerConnection.createAnswer();
-		// await peerConnection.setLocalDescription(answer);
-		// signalAccept = JSON.stringify(answer.toJSON());
-		// console.log(signalAccept);
-	};
-
-	// Function to accept a webrtc peer 2 peer connection
-	// const acceptP2P = async () => {
 </script>
 
 <h3>Artifact 1</h3>
@@ -52,9 +36,13 @@
 	<button on:click={startP2P}>Start Peer 2 Peer Connection</button>
 	<textarea readonly rows="10" value={signalOffer} />
 </div>
+{#if signalOffer}
+	<div>
+		<label>
+			Paste the counter offer here:
+			<textarea rows="10" />
+		</label>
+		<button class="secondary">Accept Peer 2 Peer Connection</button>
+	</div>
+{/if}
 <hr />
-<!-- Inputs that can be edited need 2 way data binding -->
-<div>
-	<textarea rows="10" bind:value={signalAccept} />
-	<button class="secondary" on:click={acceptP2P}>Accept Peer 2 Peer Connection</button>
-</div>
