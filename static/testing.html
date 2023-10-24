@@ -1,5 +1,14 @@
 <html>
-	<head>
+	<head> </head>
+	<body>
+		<p id="stat"></p>
+		<button id="button" onclick="createOffer()">Offer:</button>
+		<textarea id="offer" placeholder="Paste offer here. And press Enter"></textarea>
+		Answer:
+		<textarea id="answer" type="submit"></textarea><br />
+		Chat:
+		<input id="chat" /><br />
+		<pre id="output">Chat: </pre>
 		<script>
 			const output = document.getElementById('output');
 			const config = {
@@ -15,6 +24,8 @@
 				id: 0
 			});
 			const log = (msg) => (output.innerHTML += `<br>${msg}`);
+			const chat = document.getElementById('chat');
+
 			dc.onopen = () => chat.select();
 			dc.onmessage = (e) => log(`> ${e.data}`);
 			pc.oniceconnectionstatechange = (e) => log(pc.iceConnectionState);
@@ -25,6 +36,8 @@
 				log(chat.value);
 				chat.value = '';
 			};
+
+			const offer = document.getElementById('offer');
 
 			async function createOffer() {
 				button.disabled = true;
@@ -55,6 +68,7 @@
 				};
 			};
 
+			const answer = document.getElementById('answer');
 			// TODO: Keystroke logic is not working on pressing Enter key
 			answer.onkeypress = function (e) {
 				if (e.keyCode != 13 || pc.signalingState != 'have-local-offer') return;
@@ -91,14 +105,5 @@
 			}
 			handleChange();
 		</script>
-	</head>
-	<p id="stat"></p>
-	<button id="button" onclick="createOffer()">Offer:</button>
-	<textarea id="offer" placeholder="Paste offer here. And press Enter"></textarea>
-	Answer:
-	<textarea id="answer" type="submit"></textarea
-	><br />
-	Chat:
-	<input id="chat" /><br />
-	<pre id="output">Chat: </pre>
+	</body>
 </html>
