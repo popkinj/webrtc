@@ -7,10 +7,21 @@
 	let peerConnection;
 	let dataChannel;
 
+	const config = {
+		iceServers: [
+			{
+				urls: ['stun:stun.l.google.com:19302']
+			}
+		]
+	};
+
 	// Create a new RTCPeerConnection
 	onMount(() => {
-		peerConnection = new RTCPeerConnection();
-		dataChannel = peerConnection.createDataChannel('dataChannel');
+		peerConnection = new RTCPeerConnection(config);
+		dataChannel = peerConnection.createDataChannel('dataChannel', {
+			negotiated: true,
+			id: 0
+		});
 	});
 
 	// Function to start a webrtc peer 2 peer connection
@@ -18,25 +29,28 @@
 		// Create a data channel
 
 		// Listen for messages
-		dataChannel.addEventListener('message', (event) => {
-			console.log(`Message from DataChannel '${dataChannel.label}'`);
-		});
+		// dataChannel.addEventListener('message', (event) => {
+		// 	console.log(`Message from DataChannel '${dataChannel.label}'`);
+		// });
 
 		// Create an offer
 		const offer = await peerConnection.createOffer();
 		await peerConnection.setLocalDescription(offer);
-		signalOffer = JSON.stringify(offer.toJSON());
+		peerConnection.onicecandidate = ({ candidate }) => {
+			if (candidate) return;
+			signalOffer = peerConnection.localDescription.sdp;
+		};
 	};
 
 	// TODO: Think I need to listen for Ice candidates here
-	const acceptP2P = async () => {
-		const accept = JSON.parse(signalAccept);
-		console.log('accept', accept);
-		await peerConnection.setRemoteDescription(accept);
-		setInterval(() => {
-			console.log('connection state', peerConnection.connectionState);
-		}, 1000);
-	};
+	// const acceptP2P = async () => {
+	// 	const accept = JSON.parse(signalAccept);
+	// 	console.log('accept', accept);
+	// 	await peerConnection.setRemoteDescription(accept);
+	// 	setInterval(() => {
+	// 		console.log('connection state', peerConnection.connectionState);
+	// 	}, 1000);
+	// };
 </script>
 
 <h3>Artifact 1</h3>

@@ -39,6 +39,7 @@
 
 			const offer = document.getElementById('offer');
 
+			/****************************************************/
 			async function createOffer() {
 				button.disabled = true;
 				await pc.setLocalDescription(await pc.createOffer());
@@ -49,9 +50,8 @@
 					answer.placeholder = 'Paste answer here. And Press Enter';
 				};
 			}
+			/****************************************************/
 
-			// TODO: Keystroke logic is not working on pressing Enter key
-			// TODO: These element references are not even defined anywhere!!! 💣
 			offer.onkeypress = async function (e) {
 				if (e.keyCode != 13 || pc.signalingState != 'stable') return;
 				button.disabled = offer.disabled = true;
@@ -69,7 +69,6 @@
 			};
 
 			const answer = document.getElementById('answer');
-			// TODO: Keystroke logic is not working on pressing Enter key
 			answer.onkeypress = function (e) {
 				if (e.keyCode != 13 || pc.signalingState != 'have-local-offer') return;
 				answer.disabled = true;
