@@ -4,31 +4,38 @@
 	let signalOffer = '';
 	let signalAccept = '';
 	let peerConnection;
+	let dataChannel;
+
+	const config = {
+		iceServers: [
+			{
+				urls: 'stun:stun.l.google.com:19302' // list of free STUN servers: https://gist.github.com/zziuni/3741933
+			}
+		]
+	};
 
 	onMount(() => {
-		peerConnection = new RTCPeerConnection();
-
-		peerConnection.addEventListener('icecandidate', (event) => {
-			console.log('icecandidate - connection state', peerConnection.connectionState);
-			if (event.candidate) {
-				console.log('New ICE candidate');
-				console.log(event.candidate);
-			}
+		peerConnection = new RTCPeerConnection(config);
+		dataChannel = peerConnection.createDataChannel('dataChannel', {
+			negotiated: true,
+			id: 0
 		});
 
-		peerConnection.addEventListener('iceconnectionstatechange', (event) => {
-			console.log('state change - connection state change', peerConnection.connectionState);
-		});
+		// peerConnection.addEventListener('iceconnectionstatechange', (event) => {
+		// 	console.log('state change - connection state change', peerConnection.connectionState);
+		// });
 	});
 
 	const acceptP2P = async () => {
-		const offer = JSON.parse(signalOffer);
-		// Create an answer
-		await peerConnection.setRemoteDescription(offer);
-		const answer = await peerConnection.createAnswer();
-		await peerConnection.setLocalDescription(answer);
-		signalAccept = JSON.stringify(answer.toJSON());
-		console.log('connection state', peerConnection.connectionState);
+		await peerConnection.setRemoteDescription({
+			type: 'offer',
+			sdp: signalOffer
+		});
+		await peerConnection.setLocalDescription(await peerConnection.createAnswer());
+		peerConnection.onicecandidate = ({ candidate }) => {
+			if (candidate) return;
+			signalAccept = peerConnection.localDescription.sdp;
+		};
 	};
 </script>
 

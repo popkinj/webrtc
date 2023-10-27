@@ -26,12 +26,10 @@
 
 	// Function to start a webrtc peer 2 peer connection
 	const startP2P = async () => {
-		// Create a data channel
-
 		// Listen for messages
-		// dataChannel.addEventListener('message', (event) => {
-		// 	console.log(`Message from DataChannel '${dataChannel.label}'`);
-		// });
+		dataChannel.addEventListener('message', (event) => {
+			console.log(`Message from DataChannel '${dataChannel.label}'`);
+		});
 
 		// Create an offer
 		const offer = await peerConnection.createOffer();
@@ -40,17 +38,18 @@
 			if (candidate) return;
 			signalOffer = peerConnection.localDescription.sdp;
 		};
+
+		setInterval(() => {
+			console.log('connection state', peerConnection.connectionState);
+		}, 1000);
 	};
 
-	// TODO: Think I need to listen for Ice candidates here
-	// const acceptP2P = async () => {
-	// 	const accept = JSON.parse(signalAccept);
-	// 	console.log('accept', accept);
-	// 	await peerConnection.setRemoteDescription(accept);
-	// 	setInterval(() => {
-	// 		console.log('connection state', peerConnection.connectionState);
-	// 	}, 1000);
-	// };
+	const acceptP2P = async () => {
+		await peerConnection.setRemoteDescription({
+			type: 'answer',
+			sdp: signalAccept
+		});
+	};
 </script>
 
 <h3>Artifact 1</h3>

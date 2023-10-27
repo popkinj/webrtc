@@ -52,6 +52,9 @@
 			}
 			/****************************************************/
 
+			/**
+			 * This is the accepting of the first offer
+			 */
 			offer.onkeypress = async function (e) {
 				if (e.keyCode != 13 || pc.signalingState != 'stable') return;
 				button.disabled = offer.disabled = true;
@@ -68,6 +71,9 @@
 				};
 			};
 
+			/**
+			 * This is the accepting of the answer
+			 */
 			const answer = document.getElementById('answer');
 			answer.onkeypress = function (e) {
 				if (e.keyCode != 13 || pc.signalingState != 'have-local-offer') return;
