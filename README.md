@@ -1,38 +1,17 @@
-# create-svelte
+# Serverless Peer to Peer Proof of Concept
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Description
 
-## Creating a project
+Proove you can create a Peer to Peer conection without a signaling server.
 
-If you're seeing this, you've probably already done this step. Congrats!
+A testing server is running here in the place of having two separate wallet applications. The QR Code could eventually use deep links to open the wallet application directly.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Flow
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+1. Instigator creates a QR-Code which contains a link to the testing server. The url will contain all the connection information of the Instigator.
+1. The responder scans the QR-Code and opens the link in the browser.
+1. The responder stores the connection information into Peer object.
+1. The instigator gets the signal through webrtc that the responder is ready to connect.
+1. The instigator's camera is turned on ready to scan the responders QR-Code.
+1. The responder creates a QR-Code which contains a link to the testing server. The url will contain all the connection information of the Responder.
+1. The instigator scans the QR-Code of the responder and saves the connection information into a Peer object.
