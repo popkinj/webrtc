@@ -1,16 +1,14 @@
 <script>
 	import { onMount } from 'svelte';
+	import QRCode from 'easyqrcodejs'
 
 	const hashchange = () => {
 		const hash = window.location.hash;
-		console.log('hashchange', hash);
 		if (hash) {
-			/* TODO: Use a switch statement to handle all hashchange states and cases
-			 * - instigate
+			/*  States
 			 * - offer
 			 * - counter
-			 * - complete
-			 * TODO: Not sure what to do regarding svelte state
+			 * - live
 			 */
 			if (hash.includes('#offer=')) {
 				// Add remote in Peer object
@@ -18,8 +16,14 @@
 				console.log('offer');
 			} else if (hash.includes('#counter=')) {
 				// Add remote in Peer object
-				// complete connection
+				// complete connection... move to #live
 				console.log('counter');
+			} else if (hash.includes('#live')) {
+				// Connection is active
+				console.log('live')
+			} else {
+				// If another other hash
+				console.log('instigate');
 			}
 		} else {
 			// instigate connection
