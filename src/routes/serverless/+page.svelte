@@ -31,7 +31,7 @@
       if (candidate) return;
       signalOffer = peerConnection.localDescription.sdp;
 	  const uri = encodeURIComponent(JSON.stringify({ offer: signalOffer }));
-	  console.log('uri', `/serverless#offer=${uri}`);
+	  console.log('uri', `localhost:5173/serverless#offer=${uri}`);
 	  console.log('signalOffer', signalOffer)
     };
 
