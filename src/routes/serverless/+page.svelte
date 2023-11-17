@@ -1,9 +1,34 @@
+<!--
+	Create a data connection without a Stun or Signal server.
+	Must be on the same network.
+-->
 <script>
 	import { onMount } from 'svelte';
 	import QRCode from 'easyqrcodejs'
 
+
+	const instigate = () => {
+		console.log('instigate');
+
+		/*
+		  TODO:
+		  - Create an offer sdb object
+		  - URI Encode the sdb object
+		  - Create total url string
+		  - Create QRCode from the url string
+		*/
+		const options = {
+			text: "https://github.com/ushelp/EasyQRCodeJS"
+		};
+		
+		// Create QRCode Object
+		new QRCode(document.getElementById("qrcode"), options);
+	}
+
+
 	const hashchange = () => {
 		const hash = window.location.hash;
+
 		if (hash) {
 			/*  States
 			 * - offer
@@ -23,18 +48,17 @@
 				console.log('live')
 			} else {
 				// If another other hash
-				console.log('instigate');
+				instigate();
 			}
 		} else {
 			// instigate connection
-			console.log('instigate');
+			instigate();
 		}
 	};
 
 	onMount(hashchange);
 </script>
 
-<li>If there is no hash then instigate a connection</li>
-<li>If there is a hashchange containing an offer then create a counter offer and update hash</li>
-<li>If there is a hashchange containing a counter offer complete connection</li>
 <svelte:window on:hashchange={hashchange} />
+
+<div id="qrcode"></div>

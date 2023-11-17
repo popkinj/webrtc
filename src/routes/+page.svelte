@@ -6,6 +6,9 @@
 <div>
 	<a href="/artifact2">Artifact 2</a> - User or entity 2
 </div>
+<div>
+	<a href="/serverless">Serverless</a> - Serverless webrtc signalling
+</div>
 
 <style>
 	hr {
