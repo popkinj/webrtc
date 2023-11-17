@@ -11,16 +11,32 @@
   let peerConnection;
   let dataChannel;
 
+  // No STUN or Signal server
   const config = {
     iceServers: [ ]
   };
 
-  const instigate = () => {
+  const instigate = async () => {
     console.log('instigate');
+
+    peerConnection = new RTCPeerConnection(config);
+    dataChannel = peerConnection.createDataChannel('dataChannel', {
+      negotiated: true,
+      id: 0
+    });
+
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    peerConnection.onicecandidate = ({ candidate }) => {
+      if (candidate) return;
+      signalOffer = peerConnection.localDescription.sdp;
+	  const uri = encodeURIComponent(JSON.stringify({ offer: signalOffer }));
+	  console.log('uri', `/serverless#offer=${uri}`);
+	  console.log('signalOffer', signalOffer)
+    };
 
     /*
       TODO:
-      - Create an offer sdb object
       - URI Encode the sdb object
       - Create total url string
       - Create QRCode from the url string
