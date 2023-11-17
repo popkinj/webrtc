@@ -1,62 +1,70 @@
 <!--
-	Create a data connection without a Stun or Signal server.
-	Must be on the same network.
+  Create a data connection without a Stun or Signal server.
+  Must be on the same network.
 -->
 <script>
-	import { onMount } from 'svelte';
-	import QRCode from 'easyqrcodejs'
+  import { onMount } from 'svelte';
+  import QRCode from 'easyqrcodejs'
+
+  let signalOffer = '';
+  let signalAccept = '';
+  let peerConnection;
+  let dataChannel;
+
+  const config = {
+    iceServers: [ ]
+  };
+
+  const instigate = () => {
+    console.log('instigate');
+
+    /*
+      TODO:
+      - Create an offer sdb object
+      - URI Encode the sdb object
+      - Create total url string
+      - Create QRCode from the url string
+    */
+    const options = {
+      text: "https://github.com/ushelp/EasyQRCodeJS"
+    };
+    
+    // Create QRCode Object
+    new QRCode(document.getElementById("qrcode"), options);
+  }
 
 
-	const instigate = () => {
-		console.log('instigate');
+  const hashchange = () => {
+    const hash = window.location.hash;
 
-		/*
-		  TODO:
-		  - Create an offer sdb object
-		  - URI Encode the sdb object
-		  - Create total url string
-		  - Create QRCode from the url string
-		*/
-		const options = {
-			text: "https://github.com/ushelp/EasyQRCodeJS"
-		};
-		
-		// Create QRCode Object
-		new QRCode(document.getElementById("qrcode"), options);
-	}
+    if (hash) {
+      /*  States
+       * - offer
+       * - counter
+       * - live
+       */
+      if (hash.includes('#offer=')) {
+        // Add remote in Peer object
+        // create counter offer QR-Code
+        console.log('offer');
+      } else if (hash.includes('#counter=')) {
+        // Add remote in Peer object
+        // complete connection... move to #live
+        console.log('counter');
+      } else if (hash.includes('#live')) {
+        // Connection is active
+        console.log('live')
+      } else {
+        // If another other hash
+        instigate();
+      }
+    } else {
+      // instigate connection
+      instigate();
+    }
+  };
 
-
-	const hashchange = () => {
-		const hash = window.location.hash;
-
-		if (hash) {
-			/*  States
-			 * - offer
-			 * - counter
-			 * - live
-			 */
-			if (hash.includes('#offer=')) {
-				// Add remote in Peer object
-				// create counter offer QR-Code
-				console.log('offer');
-			} else if (hash.includes('#counter=')) {
-				// Add remote in Peer object
-				// complete connection... move to #live
-				console.log('counter');
-			} else if (hash.includes('#live')) {
-				// Connection is active
-				console.log('live')
-			} else {
-				// If another other hash
-				instigate();
-			}
-		} else {
-			// instigate connection
-			instigate();
-		}
-	};
-
-	onMount(hashchange);
+  onMount(hashchange);
 </script>
 
 <svelte:window on:hashchange={hashchange} />
