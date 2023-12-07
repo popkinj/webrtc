@@ -6,6 +6,7 @@
   let signalAccept = '';
   let peerConnection;
   let dataChannel;
+  let txtMessage = '';
 
   const config = {
     iceServers: [
@@ -26,11 +27,6 @@
 
   // Function to start a webrtc peer 2 peer connection
   const startP2P = async () => {
-    // Listen for messages
-    dataChannel.addEventListener('message', (event) => {
-      console.log(`Message from DataChannel '${dataChannel.label}'`);
-    });
-
     // Create an offer
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
@@ -45,11 +41,23 @@
   };
 
   const acceptP2P = async () => {
+    // Listen for messages
+    dataChannel.addEventListener('message', (event) => {
+      console.log(event.data);
+    });
+
+    console.log('accept')
     await peerConnection.setRemoteDescription({
       type: 'answer',
       sdp: signalAccept
     });
+    console.log('accepted')
   };
+
+  const send = () => {
+    dataChannel.send(txtMessage);
+  };
+
 </script>
 
 <h3>Artifact 1</h3>
@@ -68,5 +76,20 @@
     {#if signalAccept}
       <button class="secondary" on:click={acceptP2P}>Accept Peer 2 Peer Connection</button>
     {/if}
+  </div>
+{/if}
+
+<!--
+  This is for testing
+-->
+{#if true}
+
+<!-- {#if peerConnection?.connectionState === 'connected'} -->
+  <div>
+    <label>
+      Send a message:
+      <input type="text" bind:value={txtMessage}/>
+    </label>
+    <button class="secondary" on:click={send}>Send</button>
   </div>
 {/if}
