@@ -1,10 +1,15 @@
-# Serverless Peer to Peer Proof of Concept
+# Serverless Peer to Peer Encrypted Connection
 
 ## Description
 
 Proove you can create a Peer to Peer connection without a signaling server.
 
-A testing server is running here in the place of having two separate wallet applications. The QR Code could eventually use deep links to open the wallet application directly.
+Normally a signaling server is used to exchange connection information between two peers. Commonly done through a websocket. This project is proof of concept to create a peer to peer connection without a signaling server.
+
+Currently there is a [STUN](https://en.wikipedia.org/wiki/STUN) server used to calculate the public internet address. If the peers are on the same network, the STUN server is not needed. 
+
+This project uses the [WebRTC](https://en.wikipedia.org/wiki/WebRTC) javascript implementation supported by most modern browsers. If you want to create a peer to peer connection without the use of a helper library then this may be a good place to start.
+
 
 ## Developement Environment
 
@@ -17,9 +22,9 @@ npm run dev
 
 ## Current Workflow
 1. Open two browser windows to the testing server.
->  - [page 1](http://localhost:5173/artifact1)
->  - [page 2](http://localhost:5173/artifact2)
-2. Create and pass the connection information between page 1 to page 2.
+>  - [Page 1](http://localhost:5173/artifact1)
+>  - [Page 2](http://localhost:5173/artifact2)
+2. Create and pass the connection information between page 1 and page 2.
 3. When a data connection is established, test sending messages between the two pages. Currently all messages are sent to the console.
 
 ## Future Workflow
