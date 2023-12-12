@@ -19,8 +19,8 @@ npm run dev
 1. Open two browser windows to the testing server.
 >  - [page 1](http://localhost:5173/artifact1)
 >  - [page 2](http://localhost:5173/artifact2)
-1. Create and pass the connection information between page 1 to page 2.
-1. When a data connection is established, test sending messages between the two pages. Currently all messages are sent to the console.
+2. Create and pass the connection information between page 1 to page 2.
+3. When a data connection is established, test sending messages between the two pages. Currently all messages are sent to the console.
 
 ## Future Workflow
 
